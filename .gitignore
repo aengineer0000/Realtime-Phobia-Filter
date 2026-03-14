@@ -1,0 +1,8 @@
+.venv/
+insects-2/
+*.jpg
+*.png
+*:Zone.Identifier
+images/
+wandb/
+*.mp4
