@@ -10,11 +10,13 @@ from PIL import Image
 from pathlib import Path
 
 
+# NEED TO MAKE A CONFIG FILE (JSON)
+
 # ── Config ───────────────────────────────────────────────────────────────────
 CSV_PATH   = "trypophobia.csv" #path/to/dataset
-IMG_SIZE   = 224
+IMG_SIZE   = 224 # Default
 BATCH_SIZE = 32
-EPOCHS     = 15
+EPOCHS     = 15 
 LR         = 1e-4
 DEVICE     = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {DEVICE}")
@@ -38,6 +40,7 @@ class TrypoDataset(Dataset):
 
 
 # ── 2. Transforms ────────────────────────────────────────────────────────────
+print("Transforming Data")
 train_transform = transforms.Compose([
     transforms.Resize((IMG_SIZE, IMG_SIZE)),
     transforms.RandomHorizontalFlip(),
@@ -58,6 +61,7 @@ val_transform = transforms.Compose([
 
 
 # ── 3. Data splits ───────────────────────────────────────────────────────────
+print("Reading Dataset")
 df = pd.read_csv(CSV_PATH)
 train_df, val_df = train_test_split(
     df, test_size=0.2, stratify=df["label"], random_state=42
@@ -70,6 +74,7 @@ val_ds   = TrypoDataset(val_df,   transform=val_transform)
 
 
 # ── 4. Imbalance: WeightedRandomSampler ─────────────────────────────────────
+print("Using WeightedRandomSampler/Dataloader")
 counts = train_df["label"].value_counts().sort_index().values.astype(float)
 class_weights = 1.0 / counts
 sample_weights = train_df["label"].map({0: class_weights[0], 1: class_weights[1]}).values
@@ -82,15 +87,16 @@ sampler = WeightedRandomSampler(
 train_loader = DataLoader(
     train_ds, batch_size=BATCH_SIZE,
     sampler=sampler,          # replaces shuffle=True
-    num_workers=4, pin_memory=True
+    num_workers=0, pin_memory=True
 )
 val_loader = DataLoader(
     val_ds, batch_size=BATCH_SIZE,
-    shuffle=False, num_workers=4, pin_memory=True
+    shuffle=False, num_workers=0, pin_memory=True
 )
 
 
 # ── 5. Model (pretrained ResNet18, swapped classifier head) ──────────────────
+print('Initializing RESNET18')
 model = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)
 model.fc = nn.Linear(model.fc.in_features, 2)   # 2 classes: norm / trypo
 model = model.to(DEVICE)
@@ -139,7 +145,7 @@ def eval_epoch(model, loader, criterion):
 
 # ── 8. Training loop ─────────────────────────────────────────────────────────
 best_val_loss = float("inf")
-
+print('Starting training')
 for epoch in range(1, EPOCHS + 1):
     train_loss, train_acc = train_epoch(model, train_loader, optimizer, criterion)
     val_loss, val_acc, preds, labels = eval_epoch(model, val_loader, criterion)
