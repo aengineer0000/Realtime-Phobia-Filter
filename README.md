@@ -13,7 +13,7 @@ This branch contains some intial explorations with models, as well as a working 
 - Video input and downloadable video output
 
 ### Known Issues
-- Temp video files are created in the user's default temp folder (..Users/<user>/AppData/Temp), but they seem to persist indefinitely
+- Temp video files are created in the user's default temp folder (..Users/**"your username"**/AppData/Temp), but they seem to persist indefinitely
 - Temp video files can currently not be played in the UI, but can be downloaded
 It seems the issue has to do with the path that Gradio attempts to access to display the video, but I have not figured out the fix yet
 - The insect detection model is still too slow
