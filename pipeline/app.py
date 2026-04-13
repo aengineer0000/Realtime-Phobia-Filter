@@ -30,17 +30,15 @@ def run_pipeline(
     if not enable_trypophobia and not enable_insects:
         raise gr.Error("Enable at least one detector.")
  
-    # Write output to a temp file
-    suffix = os.path.splitext(video_file)[-1] or ".mp4"
-    tmp_out = tempfile.NamedTemporaryFile(suffix=suffix, delete=False)
-    tmp_out.close()
+    # Write output
+    output_path = os.path.join(os.path.dirname(video_file), "processed_output.mp4")
  
     def _progress(current, total):
         progress(current / max(total, 1), desc=f"Processing frame {current}/{total}")
  
-    output_path = process_video(
+    process_video(
         input_path          = video_file,
-        output_path         = tmp_out.name,
+        output_path         = output_path,
         enable_trypophobia  = enable_trypophobia,
         enable_insects      = enable_insects,
         trypo_threshold     = trypo_threshold,
