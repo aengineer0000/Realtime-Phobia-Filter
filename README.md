@@ -10,11 +10,9 @@ This branch contains some intial explorations with models, as well as a working 
 ### Features
 - 2 working models (trypophobia (ResNet18), insect (YoloWorld))
 - Sliders for users to modify blur strength, conf. threshhold, skipped frames
-- Video input and downloadable video output
+- Video input; video output downloadable and viewable in UI
 
 ### Known Issues
 - Temp video files are created in the user's default temp folder (..Users/**"your username"**/AppData/Temp), but they seem to persist indefinitely
-- Temp video files can currently not be played in the UI, but can be downloaded
-It seems the issue has to do with the path that Gradio attempts to access to display the video, but I have not figured out the fix yet
-- The insect detection model is still too slow
-- The trypophobia model blurs the whole screen when it detects a trypophobic image
+- Model inference time for both models still quite slow
+- The trypophobia model blurs the whole screen when it detects a trypophobic image; testing a grad-cam fix created patchy blurred images (grad-cam fix is not live)
