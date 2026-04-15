@@ -1,5 +1,5 @@
 .venv/
-insects-2/
+insectdata/
 *.jpg
 *.png
 *:Zone.Identifier
