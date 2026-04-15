@@ -90,7 +90,7 @@ def process_video(
     if enable_insects:
         yolo_model = YOLOWorld("weights/insects.pt")
         # yolo_model.set_classes(["insect", "spider", "snake"])
-        detectors.append(InsectDetector(yolo_model, threshold=0.2))
+        detectors.append(InsectDetector(yolo_model, threshold=0.363))
  
     if not detectors:
         raise ValueError("At least one detector must be enabled.")
