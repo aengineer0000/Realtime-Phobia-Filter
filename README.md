@@ -2,10 +2,12 @@
 
 ## Branch Summary
 
-This branch contains some intial explorations with models, as well as a working pipeline (pipeline/) (video inputs -> prediction -> video output) using a browser UI (Gradio).
+This branch contains some intial explorations with models, code that trained the models, as well as a working pipeline (pipeline/) (video inputs -> prediction -> video output) using a browser UI (Gradio).
+To start the Gradio interface, run the following command in the pipeline directory:
+`python app.py`
 
 
-## Current State of Pipeline
+## State of Pipeline
 
 ### Features
 - 2 working models (trypophobia (ResNet18), insect (YoloWorld))
